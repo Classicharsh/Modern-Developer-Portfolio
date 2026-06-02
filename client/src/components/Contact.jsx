@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, Send, MapPin } from 'lucide-react';
-import axios from 'axios';
+import emailjs from '@emailjs/browser';
 
 const Github = ({ size = 24, ...props }) => (
   <svg
@@ -63,13 +63,31 @@ const Contact = () => {
     setStatus({ submitting: true, success: false, error: null });
     
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      await axios.post(`${apiBaseUrl}/api/contact`, formData);
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS environment variables are not fully configured.');
+      }
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+        publicKey
+      );
+
       setStatus({ submitting: false, success: true, error: null });
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
     } catch (err) {
-      setStatus({ submitting: false, success: false, error: 'Failed to send message. Please try again later.' });
+      const errorMessage = err?.text || err?.message || 'Failed to send message. Please try again later.';
+      setStatus({ submitting: false, success: false, error: errorMessage });
     }
   };
 

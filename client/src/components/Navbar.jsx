@@ -22,6 +22,7 @@ const Navbar = () => {
     { name: 'Projects', to: 'projects' },
     { name: 'Education', to: 'education' },
     { name: 'Featured', to: 'featured-projects' },
+    { name: 'GitHub', to: 'github-stats' },
     { name: 'Contact', to: 'contact' },
   ];
 

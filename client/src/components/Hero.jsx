@@ -20,6 +20,7 @@ const Hero = () => {
                 src="/profile.jpg" 
                 alt="Harshit Prajapati" 
                 className="w-full h-full rounded-full object-cover"
+                fetchpriority="high"
               />
             </div>
           </motionDom.div>

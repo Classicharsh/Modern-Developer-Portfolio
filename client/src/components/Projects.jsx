@@ -293,6 +293,7 @@ const Projects = () => {
                     src="/wavetipz_banner.png" 
                     alt="WaveTipz Official Banner" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4">
                     <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-900/90 text-primary rounded-md border border-zinc-800">
@@ -350,6 +351,7 @@ const Projects = () => {
                       src={project.image} 
                       alt={project.title} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                       <a 
