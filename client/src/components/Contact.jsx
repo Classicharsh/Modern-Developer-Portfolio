@@ -67,17 +67,38 @@ const Contact = () => {
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 
+      if (import.meta.env.DEV) {
+        console.log('[EmailJS Dev Log] Initializing email send.');
+        console.log('[EmailJS Dev Log] Public Key:', publicKey);
+        console.log('[EmailJS Dev Log] Service ID:', serviceId);
+        console.log('[EmailJS Dev Log] Template ID:', templateId);
+      }
+
       if (!serviceId || !templateId || !publicKey) {
+        if (import.meta.env.DEV) {
+          console.error('[EmailJS Dev Log] Configuration error: Missing environment variables.', {
+            VITE_EMAILJS_PUBLIC_KEY: publicKey,
+            VITE_EMAILJS_SERVICE_ID: serviceId,
+            VITE_EMAILJS_TEMPLATE_ID: templateId
+          });
+        }
         throw new Error('EmailJS environment variables are not fully configured.');
       }
 
       const { name, email, message } = formData;
       await emailjs.send(serviceId, templateId, { name, email, message }, publicKey);
 
+      if (import.meta.env.DEV) {
+        console.log('[EmailJS Dev Log] Email sent successfully!');
+      }
+
       setStatus({ submitting: false, success: true, error: null });
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
     } catch (err) {
+      if (import.meta.env.DEV) {
+        console.error('[EmailJS Dev Log] Error sending email:', err);
+      }
       const errorMessage = err?.text || err?.message || 'Failed to send message. Please try again later.';
       setStatus({ submitting: false, success: false, error: errorMessage });
     }
