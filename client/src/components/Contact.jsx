@@ -63,24 +63,16 @@ const Contact = () => {
     setStatus({ submitting: true, success: false, error: null });
     
     try {
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
       if (!serviceId || !templateId || !publicKey) {
         throw new Error('EmailJS environment variables are not fully configured.');
       }
 
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        },
-        publicKey
-      );
+      const { name, email, message } = formData;
+      await emailjs.send(serviceId, templateId, { name, email, message }, publicKey);
 
       setStatus({ submitting: false, success: true, error: null });
       setFormData({ name: '', email: '', message: '' });
